@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUFTHAMSTRAR - BOKA FLYG HÄR!!!</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    background-image:
+      repeating-linear-gradient(45deg, #000 0 12px, #000a2a 12px 24px);
+    color: #3399ff;
+    font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+    font-size: 16px;
+  }
+  .wrap {
+    width: 760px;
+    max-width: 96%;
+    margin: 10px auto 40px;
+    border: 6px ridge #0044ff;
+    background: #000;
+    padding: 10px;
+  }
+  marquee {
+    background: #0000cc;
+    color: #ffff00;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 4px 0;
+    border: 3px outset #6699ff;
+  }
+  h1 {
+    text-align: center;
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: 48px;
+    margin: 14px 0 0;
+    color: #0066ff;
+    text-shadow: 3px 3px 0 #003399, 5px 5px 0 #001a66;
+    letter-spacing: 2px;
+  }
+  .sub {
+    text-align: center;
+    color: #66ccff;
+    margin: 4px 0 12px;
+  }
+  .blink { animation: blink 1s steps(2, start) infinite; color: #ffff00; font-weight: bold; }
+  @keyframes blink { to { visibility: hidden; } }
+
+  hr { border: 0; border-top: 4px dotted #0055ff; margin: 14px 0; }
+
+  .notice {
+    border: 4px double #3399ff;
+    background: #00104d;
+    color: #ffffff;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .notice small { display: block; color: #ffff00; font-size: 14px; }
+
+  table.form { width: 100%; border-collapse: collapse; }
+  table.form td { border: 2px solid #0044ff; padding: 8px; vertical-align: top; }
+  table.form td.label { width: 32%; background: #00104d; color: #99ccff; font-weight: bold; }
+
+  input[type="text"], select {
+    font-family: "Courier New", monospace;
+    font-size: 15px;
+    background: #fff;
+    color: #000080;
+    border: 2px inset #6688cc;
+    padding: 3px;
+    width: 95%;
+  }
+
+  .route { display: block; padding: 4px 2px; cursor: pointer; color: #ccddff; }
+  .route input { margin-right: 6px; }
+  .route.selected { background: #0033cc; color: #ffff00; font-weight: bold; }
+
+  button {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    background: #c0c0c0;
+    color: #000080;
+    border: 3px outset #ffffff;
+    padding: 6px 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:active { border-style: inset; }
+  button.big { font-size: 22px; padding: 10px 30px; display: block; margin: 14px auto 4px; }
+
+  .error {
+    display: none;
+    background: #660000;
+    color: #ffff00;
+    border: 3px solid #ff0000;
+    padding: 8px;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  .info { color: #99ccff; font-size: 14px; margin-top: 8px; }
+
+  /* Biljett */
+  #ticketSection { display: none; margin-top: 20px; }
+  .ticket {
+    border: 5px dashed #3399ff;
+    background: #00104d;
+    color: #ffffff;
+    padding: 14px;
+    font-family: "Courier New", monospace;
+  }
+  .ticket h2 {
+    margin: 0 0 8px;
+    text-align: center;
+    font-family: Impact, "Arial Black", sans-serif;
+    color: #66aaff;
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+  .ticket table { width: 100%; border-collapse: collapse; }
+  .ticket td { border: 1px solid #3366cc; padding: 6px; }
+  .ticket td.k { width: 38%; color: #99ccff; }
+  .ticket td.v { font-weight: bold; color: #ffff66; }
+  .ticket .no { text-align: center; margin-top: 8px; color: #99ccff; }
+
+  .counter { text-align: center; margin-top: 18px; color: #6699ff; font-size: 13px; }
+
+  @media print { marquee, #bookingSection, .notice.top, .actions { display: none; } body { background: #fff; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <marquee scrollamount="6">✈ VÄLKOMMEN TILL LUFTHAMSTRAR ✈ MINECRAFT PRIVATFLYG ✈ BOKA DITT FLYG HÄR ✈</marquee>
+
+  <h1>LUFTHAMSTRAR</h1>
+  <div class="sub"><span class="blink">*** BOKA FLYG ***</span></div>
+
+  <hr>
+
+  <div class="notice top">Betala 165 000 Credits till Koolter via Discord</div>
+  <div class="notice top">Skicka skärmbild på din biljett till Koolter via Discord</div>
+
+  <hr>
+
+  <div id="bookingSection">
+    <h2 style="text-align:center; color:#66aaff;">&gt;&gt; BOKNING &lt;&lt;</h2>
+
+    <form id="bookingForm" novalidate>
+      <table class="form">
+        <tr>
+          <td class="label">Ditt Minecraft-namn:</td>
+          <td><input type="text" id="name" maxlength="32" autocomplete="off"></td>
+        </tr>
+        <tr>
+          <td class="label">Välj rutt:</td>
+          <td id="routeList"></td>
+        </tr>
+        <tr>
+          <td class="label">Datum:</td>
+          <td>
+            <select id="date"></select>
+            <div class="info">Bara tisdagar, torsdagar och söndagar.</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">Avgångstid:</td>
+          <td>
+            <select id="time"></select>
+            <div class="info">Piloten flyger 17:00 - 21:00.</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">Terminal &amp; gate:</td>
+          <td>
+            <div id="gateInfo"></div>
+            <div class="info">Gaten slumpas när du bokar.</div>
+          </td>
+        </tr>
+      </table>
+
+      <div class="error" id="error"></div>
+      <button type="submit" class="big">BOKA FLYG</button>
+    </form>
+  </div>
+
+  <div id="ticketSection">
+    <hr>
+    <div class="ticket">
+      <h2>✈ LUFTHAMSTRAR BILJETT ✈</h2>
+      <table>
+        <tr><td class="k">Passagerare:</td><td class="v" id="tName"></td></tr>
+        <tr><td class="k">Datum:</td><td class="v" id="tDate"></td></tr>
+        <tr><td class="k">Avgångstid:</td><td class="v" id="tTime"></td></tr>
+        <tr><td class="k">Från:</td><td class="v" id="tFromAp"></td></tr>
+        <tr><td class="k">Terminal:</td><td class="v" id="tFromTerm"></td></tr>
+        <tr><td class="k">Gate:</td><td class="v" id="tFromGate"></td></tr>
+        <tr><td class="k">Till:</td><td class="v" id="tToAp"></td></tr>
+        <tr><td class="k">Terminal:</td><td class="v" id="tToTerm"></td></tr>
+        <tr><td class="k">Gate:</td><td class="v" id="tToGate"></td></tr>
+      </table>
+      <div class="no">Biljettnummer: <b id="tNumber"></b></div>
+    </div>
+
+    <div class="notice">Betala 165 000 Credits till Koolter via Discord</div>
+    <div class="notice">Skicka skärmbild på din biljett till Koolter via Discord</div>
+
+    <div class="actions" style="text-align:center;">
+      <button id="newBooking" type="button">Ny bokning</button>
+      <button id="printBtn" type="button">Skriv ut</button>
+    </div>
+  </div>
+
+  <div class="counter">~ Lufthamstrar &copy; Minecraft privatflyg ~</div>
+</div>
+
+<script>
+  const AIRPORTS = {
+    kat: { name: "Katrineholm Kattport International Airport", terminal: "Terminal 3", gates: [1, 2, 3] },
+    mal: { name: "Malmö International Airport",               terminal: "Terminal 1", gates: [2] },
+    uk:  { name: "UK International Airport",                  terminal: "Terminal 1", gates: [2] }
+  };
+
+  const ROUTES = [
+    ["kat", "mal"],
+    ["mal", "kat"],
+    ["kat", "uk"],
+    ["uk", "kat"],
+    ["mal", "uk"],
+    ["uk", "mal"]
+  ];
+
+  // Flygtider: tisdag, torsdag, söndag, 17:00-21:00
+  const ALLOWED_DAYS = [2, 4, 0];
+  const START_HOUR = 17, END_HOUR = 21;
+  const DAY_NAMES = ["söndag","måndag","tisdag","onsdag","torsdag","fredag","lördag"];
+  const MONTHS = ["januari","februari","mars","april","maj","juni","juli","augusti","september","oktober","november","december"];
+
+  const $ = id => document.getElementById(id);
+  const dateSel = $("date"), timeSel = $("time");
+  let currentRoute = 0;
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+  function randomGate(airport) {
+    return airport.gates[Math.floor(Math.random() * airport.gates.length)];
+  }
+
+  function buildRoutes() {
+    const list = $("routeList");
+    list.innerHTML = "";
+    ROUTES.forEach(([f, t], i) => {
+      const row = document.createElement("label");
+      row.className = "route";
+      row.innerHTML = `<input type="radio" name="route" value="${i}"> ${AIRPORTS[f].name} -&gt; ${AIRPORTS[t].name}`;
+      row.querySelector("input").addEventListener("change", () => selectRoute(i));
+      list.appendChild(row);
+    });
+  }
+
+  function selectRoute(i) {
+    currentRoute = i;
+    const [f, t] = ROUTES[i];
+    document.querySelectorAll(".route").forEach((el, idx) => {
+      el.classList.toggle("selected", idx === i);
+      el.querySelector("input").checked = idx === i;
+    });
+    $("gateInfo").innerHTML =
+      `<b>Avgång:</b> ${AIRPORTS[f].terminal}<br><b>Ankomst:</b> ${AIRPORTS[t].terminal}`;
+  }
+
+  function fillDates() {
+    dateSel.innerHTML = "";
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    for (let i = 0; i < 70; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      if (!ALLOWED_DAYS.includes(d.getDay())) continue;
+      const o = document.createElement("option");
+      o.value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      const dn = DAY_NAMES[d.getDay()];
+      o.textContent = `${dn.charAt(0).toUpperCase() + dn.slice(1)} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+      dateSel.appendChild(o);
+    }
+  }
+
+  // Sista avgång 20:30 så piloten hinner flyga innan 21:00
+  function fillTimes() {
+    timeSel.innerHTML = "";
+    for (let h = START_HOUR; h < END_HOUR; h++) {
+      for (const m of [0, 30]) {
+        const o = document.createElement("option");
+        o.value = `${pad(h)}:${pad(m)}`;
+        o.textContent = `${pad(h)}:${pad(m)}`;
+        timeSel.appendChild(o);
+      }
+    }
+  }
+
+  buildRoutes();
+  selectRoute(0);
+  fillDates();
+  fillTimes();
+
+  function showError(msg) {
+    const e = $("error");
+    e.textContent = msg;
+    e.style.display = "block";
+  }
+
+  function validate() {
+    if (!$("name").value.trim()) return "Skriv in ditt Minecraft-namn.";
+    if (!dateSel.value) return "Inga tillgängliga datum hittades.";
+    const [y, mo, d] = dateSel.value.split("-").map(Number);
+    const dt = new Date(y, mo - 1, d);
+    if (!ALLOWED_DAYS.includes(dt.getDay())) return "Piloten flyger bara tisdagar, torsdagar och söndagar.";
+    const [hh, mm] = timeSel.value.split(":").map(Number);
+    const mins = hh * 60 + mm;
+    if (mins < START_HOUR * 60 || mins > END_HOUR * 60) return "Avgångar kan bara bokas mellan 17:00 och 21:00.";
+    const dep = new Date(y, mo - 1, d, hh, mm);
+    if (dep < new Date()) return "Den avgångstiden har redan passerat. Välj en senare tid.";
+    return null;
+  }
+
+  function ticketNumber() {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let s = "LH-";
+    for (let i = 0; i < 6; i++) s += chars[Math.floor(Math.random() * chars.length)];
+    return s;
+  }
+
+  $("bookingForm").addEventListener("submit", e => {
+    e.preventDefault();
+    $("error").style.display = "none";
+    const err = validate();
+    if (err) { showError(err); return; }
+
+    const [f, t] = ROUTES[currentRoute];
+    const from = AIRPORTS[f], to = AIRPORTS[t];
+
+    $("tName").textContent = $("name").value.trim();
+    $("tDate").textContent = dateSel.options[dateSel.selectedIndex].textContent;
+    $("tTime").textContent = timeSel.value;
+    $("tFromAp").textContent = from.name;
+    $("tFromTerm").textContent = from.terminal;
+    $("tFromGate").textContent = "Gate " + randomGate(from);
+    $("tToAp").textContent = to.name;
+    $("tToTerm").textContent = to.terminal;
+    $("tToGate").textContent = "Gate " + randomGate(to);
+    $("tNumber").textContent = ticketNumber();
+
+    $("ticketSection").style.display = "block";
+    $("ticketSection").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  $("newBooking").addEventListener("click", () => {
+    $("ticketSection").style.display = "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("printBtn").addEventListener("click", () => window.print());
+</script>
+</body>
+</html>
